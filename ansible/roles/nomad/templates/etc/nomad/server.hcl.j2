@@ -1,0 +1,33 @@
+# Increase log verbosity
+log_level = "DEBUG"
+
+# Setup data dir
+data_dir = "/var/lib/nomad/server"
+
+advertise {
+    http = "{{ self_ip }}"
+    rpc = "{{ self_ip }}"
+    serf = "{{ self_ip }}"
+}
+
+addresses {
+    http = "{{ self_ip }}"
+    rpc = "{{ self_ip }}"
+    serf = "{{ self_ip }}"
+}
+
+# Enable the server
+server {
+    enabled = true
+
+{% if initial_leader == true %}
+    bootstrap_expect = 1
+{% endif %}
+
+    server_join {
+        retry_join = [ {{ master_ips | map('quote_double') | join(',') }} ]
+        retry_max = 10
+        retry_interval = "15s"
+    }
+
+}

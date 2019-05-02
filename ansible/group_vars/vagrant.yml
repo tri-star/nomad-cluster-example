@@ -1,0 +1,8 @@
+env: vagrant
+
+app_user: vagrant
+
+master_ips:
+- "192.168.56.30"
+- "192.168.56.31"
+- "192.168.56.32"

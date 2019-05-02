@@ -1,0 +1,97 @@
+- name: nomadがインストールされていること
+  stat: path=/usr/local/bin/nomad
+  register: nomad_stat_result
+
+- name: nomadのダウンロード
+  get_url:
+    url: https://releases.hashicorp.com/nomad/0.9.0/nomad_0.9.0_linux_amd64.zip
+    dest: /tmp/nomad_0.9.0_linux_amd64.zip
+  when: not nomad_stat_result.stat.exists
+
+- name: nomadのインストール
+  unarchive:
+    src: /tmp/nomad_0.9.0_linux_amd64.zip
+    dest: /usr/local/bin
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+  when: not nomad_stat_result.stat.exists
+
+- name: nomadのzipが存在しないこと
+  file:
+    path: /tmp/nomad_0.9.0_linux_amd64.zip
+    state: absent
+
+- name: nomadの設定ファイルディレクトリが存在すること
+  file:
+    path: /etc/nomad
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nomadのサーバー用データディレクトリが存在すること
+  file:
+    path: /var/lib/nomad/server
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nomadのサーバー設定ファイルが存在すること
+  template:
+    src: ../templates/etc/nomad/server.hcl.j2
+    dest: /etc/nomad/server.hcl
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_nomad_server
+
+- name: nomadのサーバー用systemd設定が存在すること
+  template:
+    src: ../templates/etc/systemd/system/nomad-server.service.j2
+    dest: /etc/systemd/system/nomad-server.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_systemd
+
+- name: nomad(サーバー)が自動起動する設定になっていること
+  systemd:
+    name: nomad-server.service
+    enabled: true
+    state: started
+
+
+- name: nomadのクライアント用データディレクトリが存在すること
+  file:
+    path: /var/lib/nomad/client
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: nomadのクライアント設定ファイルが存在すること
+  template:
+    src: ../templates/etc/nomad/client.hcl.j2
+    dest: /etc/nomad/client.hcl
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_nomad_client
+
+- name: nomadのクライアント用systemd設定が存在すること
+  template:
+    src: ../templates/etc/systemd/system/nomad-client.service.j2
+    dest: /etc/systemd/system/nomad-client.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_systemd
+
+- name: nomad(クライアント)が自動起動する設定になっていること
+  systemd:
+    name: nomad-client.service
+    enabled: true
+    state: started

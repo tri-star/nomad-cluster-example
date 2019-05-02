@@ -1,0 +1,2 @@
+env: "ec2"
+app_user: ec2-user

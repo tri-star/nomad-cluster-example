@@ -1,0 +1,16 @@
+{
+    "server": true,
+{% if initial_leader == true %}
+    "bootstrap_expect": 1,
+{% endif %}
+    "retry_join": [
+        {{ master_ips | map('quote_double') | join(',') }}
+    ],
+    "data_dir": "/var/lib/consul",
+    "bind_addr": "{{ self_ip }}",
+    "client_addr": "{{ self_ip }} 127.0.0.1",
+    "ports": {
+        "dns": 53
+    },
+    "recursors": ["1.1.1.1"]
+}

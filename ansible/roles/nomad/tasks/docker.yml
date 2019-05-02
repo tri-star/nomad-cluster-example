@@ -1,0 +1,40 @@
+- name: Dockerがインストールされていること
+  stat: path=/usr/bin/docker
+  register: docker_stat_result
+
+#- name: Dockerインストール
+#  shell: curl -sSL https://get.docker.com | sh
+#  when: not docker_stat_result.stat.exists
+
+- name: Dockerを有効化
+  shell: amazon-linux-extras enable docker=18.06.1
+  when: not docker_stat_result.stat.exists
+
+- name: Dockerがインストールされていること
+  yum:
+    name: docker
+
+- name: ユーザがdockerグループに属していること
+  user:
+    name: "{{ app_user }}"
+    groups: docker
+    append: true
+
+- name: dockerサービスが自動起動すること
+  systemd:
+    name: docker.service
+    enabled: true
+    state: started
+
+# - name: docker-composeがインストールされていること
+#   stat: path=/usr/local/bin/docker-compose
+#   register: docker_compose_stat_result
+
+# - name: docker-composeインストール
+#   shell: curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#   when: not docker_compose_stat_result.stat.exists
+
+# - name: docker-composeが実行可能であること
+#   file:
+#     path: /usr/local/bin/docker-compose
+#     mode: 0755

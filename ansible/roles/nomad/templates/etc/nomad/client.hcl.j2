@@ -1,0 +1,15 @@
+# Increase log verbosity
+log_level = "DEBUG"
+
+# Setup data dir
+data_dir = "/var/lib/nomad/client"
+
+
+client {
+    enabled = true
+    servers = [ "{{ self_ip }}" ]
+}
+
+ports {
+    http = 5656
+}

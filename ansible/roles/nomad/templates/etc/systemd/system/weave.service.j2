@@ -1,0 +1,16 @@
+[Unit]
+Description=Weaveを起動します
+After=docker.service
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+
+{% if initial_leader == true %}
+ExecStart=/usr/local/bin/weave launch --no-dns
+{% else %}
+ExecStart=/usr/local/bin/weave launch --no-dns {{ master_ips | join(' ') }}
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

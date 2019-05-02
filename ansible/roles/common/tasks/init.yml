@@ -1,0 +1,63 @@
+
+- name: プロビジョニングに必要なパッケージがインストールされていること
+  yum:
+    name:
+    - libselinux-python
+    - python
+    - python-pip
+    - python-devel
+
+- name: Selinuxは無効化されていること
+  selinux: state=disabled
+
+- name: 日本語のロケールがインストールされていること
+  shell: locale -a | grep ja
+  register: is_japanese_locale_exists
+  ignore_errors: True
+  changed_when: false
+
+- name: 日本語のロケールをインストール
+  shell: yum reinstall -y glibc-common
+  when: is_japanese_locale_exists.stdout == ''
+
+- name: 日本語のロケールが設定されていること
+  shell: localectl set-locale LANG=ja_JP.utf8
+  # TODO: 変更された場合のみ"changed"になるように
+
+- name: タイムゾーンが日本であること
+  timezone:
+    name: Asia/Tokyo
+
+- name: "amazon-linux-extras: epelの状態確認"
+  shell: "amazon-linux-extras list | grep 'epel' | awk '{print $3}'"
+  register: amazon_epel_status
+  changed_when: amazon_epel_status.rc != 0
+  ignore_errors: True
+
+- name: EPEL有効化
+  shell: "amazon-linux-extras enable epel"
+  when: amazon_epel_status.stdout != 'enabled'
+
+- name: EPELリポジトリがインストールされていること
+  yum: name=epel-release
+  when: amazon_epel_status.stdout != 'enabled'
+
+- name: 基本パッケージがインストール済であること
+  yum:
+    name:
+    - less
+    - vim
+    - curl
+    - git
+    - jq
+    - lsof
+    - tmux
+    - gcc
+    - make
+    - unzip
+
+- name: "aws-cliがインストールされていること"
+  pip:
+    name:
+      - awscli
+
