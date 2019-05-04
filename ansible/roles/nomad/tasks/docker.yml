@@ -20,6 +20,14 @@
     groups: docker
     append: true
 
+- name: Dockerの設定ファイルが存在すること
+  template:
+    src: ../templates/etc/docker/daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+
 - name: dockerサービスが自動起動すること
   systemd:
     name: docker.service
