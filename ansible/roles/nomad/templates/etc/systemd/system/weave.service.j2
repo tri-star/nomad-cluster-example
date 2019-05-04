@@ -1,6 +1,6 @@
 [Unit]
 Description=Weaveを起動します
-After=docker.service
+After=docker.service consul.service dnsmasq.service
 
 [Service]
 Type=simple

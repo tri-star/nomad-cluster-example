@@ -1,5 +1,5 @@
-- include: docker.yml
 - include: consul.yml
 - include: dnsmasq.yml
+- include: docker.yml
 - include: nomad.yml
 - include: weave.yml

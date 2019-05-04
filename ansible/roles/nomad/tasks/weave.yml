@@ -20,8 +20,17 @@
     mode: 0644
   notify: reload_systemd
 
+- name: weaveのイメージがダウンロード済であること
+  shell: docker image inspect weaveworks/weave:2.5.1 | jq ".[0].Id"
+  register: weave_image_inspect
+
+- name: weaveの起動準備
+  shell: /usr/local/bin/weave setup
+  when: weave_image_inspect.stdout_lines[0] == 'null'
+
 - name: weaveが自動起動すること
   systemd:
     name: weave.service
     enabled: true
     state: started
+
