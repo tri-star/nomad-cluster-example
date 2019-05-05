@@ -1,0 +1,15 @@
+- name: prometheusのデータディレクトリが存在すること
+  file:
+    path: /data/prometheus/data
+    owner: 65534
+    group: 65534
+    mode: 0755
+    recurse: yes
+
+- name: prometheusの設定ファイルが存在すること
+  template:
+    src: ../templates/data/prometheus/prometheus.yml.j2
+    dest: /data/prometheus/prometheus.yml
+    owner: root
+    group: root
+    mode: 0644

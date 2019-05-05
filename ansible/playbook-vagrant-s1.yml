@@ -4,5 +4,9 @@
   - "group_vars/vagrant.yml"
   - "group_vars/vagrant-s1.yml"
   roles:
-  - common
-  - nomad
+  - role: common
+    tags: common
+  - role: nomad
+    tags: nomad
+  - role: application
+    tags: application
