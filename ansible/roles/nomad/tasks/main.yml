@@ -3,4 +3,3 @@
 - include: docker.yml
 - include: nomad.yml
 - include: weave.yml
-- include: nginx.yml
