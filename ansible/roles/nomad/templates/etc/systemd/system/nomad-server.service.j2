@@ -5,7 +5,6 @@ After=consul-server.service
 
 [Service]
 Restart=on-failure
-#Environment=DOCKER_HOST=unix:///var/run/weave/weave.sock
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad/server.hcl -bind={{ self_ip }}
 
 ExecReload=/bin/kill -HUP $MAINPID

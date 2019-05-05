@@ -8,6 +8,9 @@ data_dir = "/var/lib/nomad/client"
 client {
     enabled = true
     servers = [ "{{ self_ip }}" ]
+{% if env == 'vagrant' %}
+    network_interface = "eth1"
+{% endif %}
 }
 
 ports {
