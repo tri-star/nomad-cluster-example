@@ -1,30 +1,36 @@
-- name: nginxがインストールされていること
-  yum:
-    name: nginx
+- name: nginxのデータボリューム用ディレクトリが存在すること
+  file:
+    path: /data/nginx/conf.d
+    state: directory
+    recurse: yes
+    owner: root
+    group: root
+    mode: 0755
 
 - name: nginxの設定ファイルが存在すること
   template:
-    src: ../templates/etc/nginx/nginx.conf.j2
-    dest: /etc/nginx/nginx.conf
+    src: ../templates/data/nginx/nginx.conf.j2
+    dest: /data/nginx/nginx.conf
     owner: root
     group: root
     mode: 0644
-  notify: reload_nginx
+  # notify: reload_nginx
 
 - name: nginxのサービス別設定ファイルが存在すること
   template:
-    src: "../templates/etc/nginx/conf.d/{{ item }}.j2"
-    dest: "/etc/nginx/conf.d/{{ item }}"
+    src: "../templates/data/nginx/conf.d/{{ item }}.j2"
+    dest: "/data/nginx/conf.d/{{ item }}"
     owner: root
     group: root
     mode: 0644
   with_items:
   - "default.conf"
-  notify: reload_nginx
+  - "prometheus.conf.ctmpl"
+  # notify: reload_nginx
 
 - name: デフォルト用ドキュメントルートが存在すること
   file:
-    path: /etc/nginx/public
+    path: /data/nginx/public
     state: directory
     owner: root
     group: root
@@ -32,16 +38,10 @@
 
 - name: デフォルト用ドキュメントルートのファイルが存在すること
   template:
-    src: "../templates/etc/nginx/public/{{ item }}.j2"
-    dest: "/etc/nginx/public/{{ item }}"
+    src: "../templates/data/nginx/public/{{ item }}.j2"
+    dest: "/data/nginx/public/{{ item }}"
     owner: root
     group: root
     mode: 0644
   with_items:
   - "index.html"
-
-- name: nginxサービスが自動起動すること
-  systemd:
-    name: nginx.service
-    enabled: true
-    state: started

@@ -1,0 +1,24 @@
+{% raw %}
+upstream prometheus {
+{{ range services  }}
+    {{ $name := .Name }}
+    {{ $service := service .Name }}
+    {{ if eq .Name "prometheus" }}
+        {{ range $service  }}
+            server {{ .Address }}:{{ .Port }} max_fails=3 fail_timeout=60 weight=1;
+        {{ end  }}
+    {{ end }}
+{{ end }}
+}
+
+server {
+    listen       9090;
+    server_name  localhost;
+
+    location / {
+        proxy_pass http://prometheus;
+    }
+
+}
+
+{% endraw %}
