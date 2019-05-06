@@ -19,8 +19,8 @@ job "node-exporter" {
       }
 
       resources {
-        // cpu    = 500 # 500 MHz
-        // memory = 256 # 256MB
+        cpu    = 100 #MHz
+        memory = 20
         network {
           // mbits = 10
           port "node_exporter" {

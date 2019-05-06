@@ -22,8 +22,8 @@ job "prometheus" {
       }
 
       resources {
-        // cpu    = 500 # 500 MHz
-        // memory = 256 # 256MB
+        cpu    = 200 //MHz
+        memory = 100
         network {
           // mbits = 10
           port "prometheus" {
