@@ -7,7 +7,11 @@ data_dir = "/var/lib/nomad/client"
 
 client {
     enabled = true
-    servers = [ "{{ self_ip }}" ]
+    server_join = {
+        retry_join = [ "{{ self_ip }}" ]
+        retry_max = 3
+        retry_interval = "15s"
+    }
 {% if env == 'vagrant' %}
     network_interface = "eth1"
 {% endif %}
