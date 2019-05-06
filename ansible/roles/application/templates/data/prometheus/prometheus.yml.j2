@@ -37,3 +37,17 @@ scrape_configs:
         replacement: /v1/metrics
       - target_label: __param_format
         replacement: prometheus
+
+  - job_name: cadvisor
+    consul_sd_configs:
+      - server: {{ self_ip }}:8500
+        services: 
+          - nomad
+
+    relabel_configs:
+      - source_labels: [__meta_consul_address]
+        target_label: __address__
+        replacement: $1:8080
+      - source_labels: [__meta_consul_node]
+        target_label: node_name
+        replacement: $1
