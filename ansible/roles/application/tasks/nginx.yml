@@ -25,7 +25,7 @@
     mode: 0644
   with_items:
   - "default.conf"
-  - "prometheus.conf.ctmpl"
+  - "dynamic.conf.ctmpl"
   # notify: reload_nginx
 
 - name: デフォルト用ドキュメントルートが存在すること

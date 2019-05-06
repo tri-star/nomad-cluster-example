@@ -54,8 +54,8 @@ job "nginx" {
       }
 
       template {
-        source = "/data/nginx/conf.d/prometheus.conf.ctmpl"
-        destination = "local/conf.d/prometheus.conf"
+        source = "/data/nginx/conf.d/dynamic.conf.ctmpl"
+        destination = "local/conf.d/dynamic.conf"
         change_mode = "restart"
         #change_signal = "SIGHUP"
       }
