@@ -1,18 +1,20 @@
 {% raw %}
-upstream prometheus {
-{{ range service "prometheus"  }}
-    server {{ .Address }}:{{ .Port }} max_fails=3 fail_timeout=60 weight=1;
-{{ end  }}
-}
-
-server {
-    listen       9090;
-    server_name  localhost;
-
-    location / {
-        proxy_pass http://prometheus;
+{{- $serviceList := service "prometheus" -}}
+{{- if gt (len $serviceList) 0  }}
+    upstream prometheus {
+    {{- range service "prometheus"  }}
+        server {{ .Address }}:{{ .Port }} max_fails=3 fail_timeout=60 weight=1;
+    {{- end }}
     }
 
-}
+    server {
+        listen       9090;
+        server_name  localhost;
 
+        location / {
+            proxy_pass http://prometheus;
+        }
+
+    }
+{{- end }}
 {% endraw %}
