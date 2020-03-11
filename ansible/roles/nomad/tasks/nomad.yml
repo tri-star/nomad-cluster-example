@@ -4,13 +4,13 @@
 
 - name: nomadのダウンロード
   get_url:
-    url: https://releases.hashicorp.com/nomad/0.9.0/nomad_0.9.0_linux_amd64.zip
-    dest: /tmp/nomad_0.9.0_linux_amd64.zip
+    url: https://releases.hashicorp.com/nomad/0.10.4/nomad_0.10.4_linux_amd64.zip
+    dest: /tmp/nomad_0.10.4_linux_amd64.zip
   when: not nomad_stat_result.stat.exists
 
 - name: nomadのインストール
   unarchive:
-    src: /tmp/nomad_0.9.0_linux_amd64.zip
+    src: /tmp/nomad_0.10.4_linux_amd64.zip
     dest: /usr/local/bin
     mode: 0755
     owner: root
@@ -20,7 +20,7 @@
 
 - name: nomadのzipが存在しないこと
   file:
-    path: /tmp/nomad_0.9.0_linux_amd64.zip
+    path: /tmp/nomad_0.10.4_linux_amd64.zip
     state: absent
 
 - name: nomadの設定ファイルディレクトリが存在すること
