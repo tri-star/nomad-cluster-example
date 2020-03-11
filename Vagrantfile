@@ -4,10 +4,6 @@ Vagrant.configure("2") do |config|
     config.vm.box_url = "http://static.urban-theory.net/boxes/am2.json"
     config.vm.box_version = "0.2.0"
     
-    if Vagrant.has_plugin?("vagrant-vbguest")
-        config.vbguest.auto_update = false
-    end
-
     config.vm.synced_folder "./", "/vagrant", type: "virtualbox"
 
     config.vm.define "s1" do |s1|
@@ -22,6 +18,13 @@ Vagrant.configure("2") do |config|
         s2.vm.network "private_network", ip: "192.168.56.31"
         s2.vm.provision "ansible_local" do |ansible|
             ansible.playbook = "/vagrant/ansible/playbook-vagrant-s2.yml"
+        end
+    end
+    config.vm.define "s3" do |s3|
+        s3.vm.hostname = "s3"
+        s3.vm.network "private_network", ip: "192.168.56.32"
+        s3.vm.provision "ansible_local" do |ansible|
+            ansible.playbook = "/vagrant/ansible/playbook-vagrant-s3.yml"
         end
     end
 
