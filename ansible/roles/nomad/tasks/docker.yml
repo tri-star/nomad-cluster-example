@@ -12,7 +12,9 @@
 
 - name: Dockerがインストールされていること
   yum:
-    name: docker
+    name: 
+    - docker
+    - amazon-ecr-credential-helper
 
 - name: ユーザがdockerグループに属していること
   user:

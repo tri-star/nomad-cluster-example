@@ -81,6 +81,15 @@
     mode: 0644
   notify: reload_nomad_client
 
+- name: nomadのDocker用設定ファイルが存在すること
+  template:
+    src: ../templates/etc/docker/config.json.j2
+    dest: /etc/docker/config.json
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_nomad_client
+
 - name: nomadのクライアント用systemd設定が存在すること
   template:
     src: ../templates/etc/systemd/system/nomad-client.service.j2

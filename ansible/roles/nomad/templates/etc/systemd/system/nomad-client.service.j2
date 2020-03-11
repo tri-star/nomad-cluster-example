@@ -5,6 +5,9 @@ After=consul-server.service
 
 [Service]
 Restart=on-failure
+{% if env == 'vagrant' %}
+EnvironmentFile=/etc/nomad/ecr.config
+{% endif %}
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad/client.hcl -bind={{ self_ip }}
 
 ExecReload=/bin/kill -HUP $MAINPID
