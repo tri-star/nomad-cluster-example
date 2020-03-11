@@ -9,7 +9,6 @@ client {
     enabled = true
     server_join = {
         retry_join = [ "{{ self_ip }}" ]
-        retry_max = 3
         retry_interval = "15s"
     }
 {% if env == 'vagrant' %}

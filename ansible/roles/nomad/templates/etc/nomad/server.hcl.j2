@@ -24,7 +24,6 @@ server {
 
     server_join {
         retry_join = [ {{ master_ips | map('quote_double') | join(',') }} ]
-        retry_max = 10
         retry_interval = "15s"
     }
 
