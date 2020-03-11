@@ -1,8 +1,6 @@
 {
     "server": true,
-{% if initial_leader == true %}
-    "bootstrap_expect": 1,
-{% endif %}
+    "bootstrap_expect": 3,
     "retry_join": [
         {{ master_ips | map('quote_double') | join(',') }}
     ],
