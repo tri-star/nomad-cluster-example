@@ -13,6 +13,11 @@
     name: nomad-client
     state: reloaded
 
+- name: reload_vault_server
+  service:
+    name: vault-server
+    state: reloaded
+
 - name: reload_nginx
   service:
     name: nginx
