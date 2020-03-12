@@ -29,6 +29,11 @@ server {
 
 }
 
+vault {
+  enabled = true
+  address = "http://{{ self_ip }}:8200"
+}
+
 telemetry {
   publish_allocation_metrics = true
   prometheus_metrics = true

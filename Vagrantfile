@@ -11,6 +11,8 @@ Vagrant.configure("2") do |config|
     sudo bash -c 'echo "AWS_ACCESS_KEY_ID=#{ENV['AWS_ACCESS_KEY_ID']}" > /etc/nomad/ecr.config'
     sudo bash -c 'echo "AWS_SECRET_ACCESS_KEY=#{ENV['AWS_SECRET_ACCESS_KEY']}" >> /etc/nomad/ecr.config'
     sudo bash -c 'echo "AWS_DEFAULT_REGION=#{ENV['AWS_DEFAULT_REGION']}" >> /etc/nomad/ecr.config'
+    sudo bash -c 'echo "VAULT_TOKEN=#{ENV['VAULT_TOKEN']}" >> /etc/nomad/vault.config'
+    sudo chmod 600 /etc/nomad/vault.config
     SCRIPT
 
     config.vm.define "s1" do |s1|

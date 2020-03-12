@@ -1,0 +1,12 @@
+[Unit]
+Description=Vault
+Requires=network-online.target
+After=consul.service
+
+[Service]
+Restart=on-failure
+ExecStart=/usr/local/bin/vault server -config /etc/vault/server.hcl
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

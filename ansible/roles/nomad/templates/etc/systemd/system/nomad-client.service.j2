@@ -8,6 +8,7 @@ Restart=on-failure
 {% if env == 'vagrant' %}
 EnvironmentFile=/etc/nomad/ecr.config
 {% endif %}
+EnvironmentFile=/etc/nomad/vault.config
 ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad/client.hcl -bind={{ self_ip }}
 
 ExecReload=/bin/kill -HUP $MAINPID

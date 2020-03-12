@@ -22,3 +22,8 @@ client {
 ports {
     http = 5656
 }
+
+vault {
+  enabled = true
+  address = "https://{{ self_ip }}:8200"
+}

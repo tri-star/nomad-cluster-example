@@ -1,3 +1,4 @@
-- include: consul.yml
 - include: docker.yml
+- include: consul.yml
+- include: vault.yml
 - include: nomad.yml

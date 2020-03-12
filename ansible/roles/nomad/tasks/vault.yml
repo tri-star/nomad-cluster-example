@@ -1,0 +1,56 @@
+- name: Vaultがインストールされていること
+  stat: path=/usr/local/bin/vault
+  register: vault_stat_result
+
+- name: Vaultのダウンロード
+  get_url:
+    url: https://releases.hashicorp.com/vault/1.3.2/vault_1.3.2_linux_amd64.zip
+    dest: /tmp/vault_1.3.2_linux_amd64.zip
+  when: not vault_stat_result.stat.exists
+
+- name: Vaultのインストール
+  unarchive:
+    src: /tmp/vault_1.3.2_linux_amd64.zip
+    dest: /usr/local/bin
+    mode: 0755
+    owner: root
+    group: root
+    remote_src: yes
+  when: not vault_stat_result.stat.exists
+
+- name: Vaultのzipが存在しないこと
+  file:
+    path: /tmp/vault_1.3.2_linux_amd64.zip
+    state: absent
+
+- name: Vaultの設定ファイルディレクトリが存在すること
+  file:
+    path: /etc/vault
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  
+- name: Vaultのサーバー設定ファイルが存在すること
+  template:
+    src: ../templates/etc/vault/server.hcl.j2
+    dest: /etc/vault/server.hcl
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_vault_server
+    
+- name: Vaultのサーバー用systemd設定が存在すること
+  template:
+    src: ../templates/etc/systemd/system/vault-server.service.j2
+    dest: /etc/systemd/system/vault-server.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload_systemd
+    
+- name: Vault(サーバー)が自動起動する設定になっていること
+  systemd:
+    name: vault-server.service
+    enabled: true
+    state: started
