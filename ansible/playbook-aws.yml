@@ -1,0 +1,11 @@
+- hosts: all
+  become: true
+  vars_files:
+  - "group_vars/aws.yml"
+  roles:
+  - role: common
+    tags: common
+  - role: nomad
+    tags: nomad
+  - role: application
+    tags: application
