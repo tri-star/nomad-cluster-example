@@ -12,3 +12,9 @@ storage "consul" {
 telemetry {
   disable_hostname = true
 }
+
+{%if env == 'aws' %}
+seal "awskms" {
+  kms_key_id = "{{ kms_key_id }}"
+}
+{% endif %}
